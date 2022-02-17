@@ -1,0 +1,20 @@
+{% extends '_base.html' %}
+
+{% block content %}
+
+    <h1>{{ collection.name }}</h1>
+
+    {% if is_subscribed %}
+        Subscribed
+    {% endif %}
+
+    {% if is_holder %}
+        Holder
+    {% endif %}
+    <ul>
+    {% for link in collection.links.all %}
+        <li><a href="{{ link.url }}">Go to {{ link }}</a></li>
+    {% endfor %}
+    </ul>
+
+{% endblock %}

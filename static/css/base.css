@@ -1,0 +1,11 @@
+html,
+body,
+nav{
+    height: 100%;
+}
+
+.content-wrapper {
+    height: 100%;
+    overflow-y: scroll;
+    padding: 25px;
+}
