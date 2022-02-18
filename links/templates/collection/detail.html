@@ -4,12 +4,20 @@
 
     <h1>{{ collection.name }}</h1>
 
-    {% if is_subscribed %}
-        Subscribed
-    {% endif %}
 
     {% if is_holder %}
         Holder
+    {% else %}
+    <form method="post" action="{% url 'subscriptions_cd' %}">
+        {% csrf_token %}
+        <input type="hidden" name="collection_id" value="{{ collection.id }}">
+        {% if is_subscribed %}
+        <button class="btn btn-danger font-weight-bold" type="submit">Unsubscribe</button>
+        {% else %}
+        <button type="submit">Subscribe</button>
+        {% endif %}
+
+    </form>
     {% endif %}
     <ul>
     {% for link in collection.links.all %}

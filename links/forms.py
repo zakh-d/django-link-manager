@@ -7,7 +7,7 @@ class CollectionCreationForm(forms.ModelForm):
 
     class Meta:
         model = Collection
-        fields = ['name']
+        fields = ['name', 'is_public']
 
     def __init__(self, user, *args, **kwargs):
         self.user = user
@@ -15,6 +15,7 @@ class CollectionCreationForm(forms.ModelForm):
 
     def save(self, commit=True):
         name = self.cleaned_data['name']
-        new_collection = Collection(name=name, holder=self.user)
+        is_public = self.cleaned_data['is_public']
+        new_collection = Collection(name=name, is_public=is_public, holder=self.user)
         new_collection.save()
         return new_collection

@@ -1,11 +1,15 @@
 {% extends "_base.html" %}
+{% load crispy_forms_tags %}
+
 
 {% block content %}
-
-    <form method="post">
+    <h1>Create a new Collection</h1>
+    <br>
+    <form method="post" class="col-md-4">
         {% csrf_token %}
-        {{ form }}
-        <button type="submit">Create</button>
+        {{ form|crispy }}
+        <br>
+        <button class="btn btn-primary" type="submit">Create</button>
     </form>
 
 

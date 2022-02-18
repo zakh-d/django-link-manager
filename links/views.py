@@ -1,4 +1,6 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.http import HttpResponseNotAllowed, HttpResponseRedirect
+from django.urls import reverse
 from django.views import generic
 
 from links.forms import CollectionCreationForm
@@ -24,10 +26,14 @@ class MySubscriptionView(MyCollectionsView):
         return list(map(lambda s: s.collection, self.request.user.my_subscriptions.all()))
 
 
-class DetailCollectionView(LoginRedirect, generic.DetailView):
+class DetailCollectionView(LoginRedirect, PermissionRequiredMixin, generic.DetailView):
     model = Collection
     context_object_name = "collection"
     template_name = 'collection/detail.html'
+
+    def has_permission(self):
+        collection = self.get_object()
+        return collection.is_public or collection.holder == self.request.user
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
@@ -50,3 +56,23 @@ class CreateCollectionView(LoginRedirect, generic.CreateView):
         kwargs['user'] = self.request.user
 
         return kwargs
+
+
+def create_delete_subscription(request):
+    if request.method == "POST":
+        collection = Collection.objects.get(id=request.POST['collection_id'])
+        try:
+
+            existing_subscription = Subscription.objects.get(collection=collection, user=request.user)
+            existing_subscription.delete()
+
+        except Subscription.DoesNotExist:
+
+            new_subscription = Subscription(collection=collection, user=request.user)
+            new_subscription.save()
+
+        finally:
+            return HttpResponseRedirect(reverse('subscriptions'))
+
+    else:
+        return HttpResponseNotAllowed('Method not allowed')
