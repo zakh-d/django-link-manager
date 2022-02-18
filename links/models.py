@@ -2,6 +2,7 @@ import uuid
 
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.urls import reverse
 
 
 class Collection(models.Model):
@@ -14,6 +15,9 @@ class Collection(models.Model):
     name = models.CharField(max_length=255)
     is_public = models.BooleanField(default=False)
     holder = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="my_collections")
+
+    def get_absolute_url(self):
+        return reverse('collection_detail', args=[self.id])
 
 
 class Link(models.Model):

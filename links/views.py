@@ -43,6 +43,10 @@ class DetailCollectionView(LoginRedirect, generic.DetailView):
 class CreateCollectionView(LoginRedirect, generic.CreateView):
     model = Collection
     template_name = "collection/create.html"
+    form_class = CollectionCreationForm
 
-    def get_form(self, **kwargs):
-        return CollectionCreationForm(self.request.user, **kwargs)
+    def get_form_kwargs(self):
+        kwargs = super(CreateCollectionView, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+
+        return kwargs

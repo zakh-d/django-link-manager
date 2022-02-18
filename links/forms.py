@@ -11,7 +11,7 @@ class CollectionCreationForm(forms.ModelForm):
 
     def __init__(self, user, *args, **kwargs):
         self.user = user
-        super().__init__(user, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def save(self, commit=True):
         name = self.cleaned_data['name']
