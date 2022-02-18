@@ -11,7 +11,7 @@ class LoginRedirect(LoginRequiredMixin):
 
 class MyCollectionsView(LoginRedirect, generic.ListView):
     model = Collection
-    context_object_name = "collection"
+    context_object_name = "collections"
     template_name = 'collection/list.html'
 
     def get_queryset(self):
